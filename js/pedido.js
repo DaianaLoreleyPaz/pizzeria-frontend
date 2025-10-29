@@ -1,10 +1,44 @@
-// Mapeo estado
+
+function listarDetallesPedido() {
+  fetch('http://localhost:8080/pedido/readAll')
+    .then(response => response.json())
+    .then(pedidos => {
+      const tbody = document.querySelector('#tablaPedidos tbody');
+      tbody.innerHTML = '';
+      pedidos.forEach(pedido => {
+        pedido.detallesDelPedido.forEach(detalle => {
+          const tr = document.createElement('tr');
+      // Para cambiar el color del estado dependiendo su valor
+          const claseEstado = pedido.estado.toLowerCase() === 'pendiente' ? 'text-danger'
+                              : pedido.estado.toLowerCase() === 'listo' ? 'text-success'
+                              : pedido.estado.toLowerCase() === 'entregado' ? 'text-dark'
+                              : pedido.estado.toLowerCase() === 'preparando' ? 'text-warning'
+                              : '';
+          tr.innerHTML = `
+            <td>${pedido.idPedido}</td>
+            <td>${pedido.nombreYApellidoCliente || 'Sin cliente'}</td>
+            <td>${detalle.nombreProducto}</td>
+            <td>${detalle.tipo}</td>
+            <td>${detalle.cantidad}</td>
+            <td class="${claseEstado}">${pedido.estado}</td>
+            <td>$${(detalle.subtotal / detalle.cantidad).toFixed(2)}</td>
+            <td>$${detalle.subtotal.toFixed(2)}</td>
+            <td>
+              </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    });
+}
+
+
 function indiceAEstadoEnum(index) {
   const estados = ['PENDIENTE', 'PREPARANDO', 'LISTO', 'ENTREGADO'];
   return estados[index] || 'PENDIENTE';
 }
 
-// Guardar (crear) pedido
+
 document.getElementById('pedidoForm').addEventListener('submit', function (e) {
   e.preventDefault();
   const formData = new FormData(this);
@@ -18,8 +52,6 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
     detallesDelPedido: []
   };
 
-  // Esta lógica de leer '.cantidad-input' aún no tiene efecto,
-  // pero la incluimos como parte de "vincular el formulario"
   document.querySelectorAll('.cantidad-input').forEach(input => {
     const cantidad = parseInt(input.value);
     const id = parseInt(input.dataset.id);
@@ -40,7 +72,7 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
     return;
   }
 
-  // En este commit, AÚN NO editamos, solo creamos
+  
   const url = 'http://localhost:8080/pedido/create';
   const method = 'POST';
 
@@ -59,9 +91,9 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
         title: 'Pedido guardado',
         text: 'Pedido guardado correctamente'
       });
-      // listarDetallesPedido(); // <- Aún no existe
+      
       document.getElementById('pedidoForm').reset();
-      // document.getElementById('productosSeleccionados').innerHTML = ''; // <- Aún no existe
+     
     })
     .catch(error => {
        Swal.fire({
@@ -71,3 +103,5 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
       });
     });
 });
+listarDetallesPedido(); 
+document.getElementById('productosSeleccionados').innerHTML = ''; 
