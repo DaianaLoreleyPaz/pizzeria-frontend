@@ -100,6 +100,11 @@ function listarDetallesPedido() {
               <button class="btn btn-sm btn-danger" onclick="eliminarPedido(${pedido.idPedido})">
                 <i class="fas fa-trash-alt"></i>
               </button>
+              ${pedido.estado === 'LISTO' ? `
+                  <button class="btn btn-sm btn-success mt-1" onclick="generarFactura(${pedido.idPedido})">
+                    <i class="fas fa-file-invoice-dollar"></i> Factura
+                  </button>` : ''
+                }
             </td>
           
           `;
