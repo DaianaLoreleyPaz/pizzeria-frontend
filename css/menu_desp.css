@@ -1,0 +1,109 @@
+/* General styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #3a4139; /* Color de fondo */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    height: 100%;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+    transition: width 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+    box-shadow: none;
+}
+
+/* Ocultar el texto del encabezado cuando el sidebar está colapsado */
+.sidebar.collapsed .sidebar-header h3,
+.sidebar.collapsed .sidebar-header h6 {
+    display: none;
+}
+
+/* Ocultar el texto del menú cuando el sidebar está colapsado */
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+/* Ajustar iconos y texto en el estado colapsado */
+.sidebar.collapsed .sidebar-menu li a {
+    padding: 10px; /* Ajustar el padding para que el icono se centre mejor */
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.sidebar-menu li {
+    width: 100%;
+    position: relative; /* Necesario para posicionar la mini ventana */
+}
+
+.sidebar-menu li a {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 15px;
+    text-decoration: none;
+    transition: background-color 0.3s, padding-left 0.3s;
+    border-radius: 5px;
+}
+
+/* Cambiar el color de fondo en hover a un tono gris oscuro */
+.sidebar-menu li a:hover {
+    background-color: #636663; /* Gris oscuro */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    padding-left: 25px;
+}
+
+/* Mini ventana (preview) */
+.menu-preview {
+    position: absolute;
+    top: 0;
+    left: 260px; /* Posicionamos la vista previa fuera del sidebar */
+    width: 180px;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 10px;
+    font-size: 0.9em;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-menu li:hover .menu-preview {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); /* Animamos la vista previa hacia arriba */
+}
+
+.menu-preview::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -8px;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent rgba(255, 255, 255, 0.9) transparent transparent;
+}
+
+.sidebar.collapsed + .content {
+    margin-left: 60px; /* Ajusta el margen cuando el menú está colapsado */
+    width: calc(100% - 60px); /* Ajusta el ancho del contenido */
+}

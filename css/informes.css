@@ -1,0 +1,72 @@
+
+
+/* Tabla de resultados del informe */
+#tablaResultados {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+#tablaResultados th {
+    padding: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: left;
+    background-color: #000;
+    color: white;
+}
+
+#tablaResultados td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+/* Botón de Generar Informe */
+#generarInforme {
+    background-color: #0a43f1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#generarInforme:hover {
+    background-color: #555;
+}
+
+/* Contenedor de filas */
+.form-group {
+    padding: 10px 0px 10px 30px;
+}
+
+/* Contenedor del botón de impresión */
+.print-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.print-button {
+    background-color: rgb(13, 0, 255);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.print-button i {
+    margin-right: 5px;
+    font-size: 20px;
+}
+
+.print-button:hover {
+    background-color: #333;
+}
