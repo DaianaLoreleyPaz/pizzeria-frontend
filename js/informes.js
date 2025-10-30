@@ -43,7 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
 
-            // Botón imprimir (Día 4)
+            // Mostrar botón imprimir si hay resultados
+            document.getElementById("btnImprimir").style.display = data.length > 0 ? "inline-block" : "none";
 
             // Limpiar tabla
             tablaHeader.innerHTML = "";
@@ -138,4 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Función de imprimir (Día 4)
+function imprimirTabla() {
+    window.print();
+}
