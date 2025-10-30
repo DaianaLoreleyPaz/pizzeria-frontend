@@ -23,7 +23,70 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Lógica de fetch (Día 2)
+        let url = "";
+        let headers = [];
+
+        if (tipo === "variedad") {
+            url = "http://localhost:8080/detallePedido/estadisticas/masPedidas";
+            headers = ["Nombre", "Tipo", "Total Pedidos"];
+        } else if (tipo === "recaudacion") {
+            url = `http://localhost:8080/pedido/estadisticas/recaudacion?inicio=${inicio}&fin=${fin}`;
+            headers = ["Fecha", "Total Recaudado"];
+        } else if (tipo === "periodo") {
+            url = `http://localhost:8080/pedido/estadisticas/totalPedidos?inicio=${inicio}&fin=${fin}`;
+            headers = ["Fecha", "Cantidad de Pedidos", "Monto Total"];
+        }
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Error al obtener los datos del backend");
+
+            const data = await response.json();
+
+            // Botón imprimir (Día 4)
+
+            // Limpiar tabla
+            tablaHeader.innerHTML = "";
+            tablaBody.innerHTML = "";
+
+            // Encabezados
+            headers.forEach(header => {
+                const th = document.createElement("th");
+                th.textContent = header;
+                tablaHeader.appendChild(th);
+            });
+
+            // Cuerpo de tabla
+            data.forEach(item => {
+                const row = document.createElement("tr");
+
+                if (tipo === "variedad") {
+                    row.innerHTML = `
+                        <td>${item.nombre}</td>
+                        <td>${item.tipo}</td>
+                        <td>${item.totalPedidos}</td>
+                    `;
+                } else if (tipo === "recaudacion") {
+                    row.innerHTML = `
+                        <td>${item.fecha}</td>
+                        <td>$${item.totalRecaudado.toFixed(2)}</td>
+                    `;
+                } else if (tipo === "periodo") {
+                    row.innerHTML = `
+                        <td>${item.fecha}</td>
+                        <td>${item.cantidadPedidos}</td>
+                        <td>$${item.montoTotal.toFixed(2)}</td>
+                    `;
+                }
+
+                tablaBody.appendChild(row);
+            });
+
+            // Gráfico (Día 3)
+
+        } catch (error) {
+            alert("Error al generar el informe: " + error.message);
+        }
     });
 });
 
