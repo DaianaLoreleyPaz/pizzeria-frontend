@@ -27,13 +27,13 @@ document.addEventListener("DOMContentLoaded", () => {
         let headers = [];
 
         if (tipo === "variedad") {
-            url = "http://localhost:8080/detallePedido/estadisticas/masPedidas";
+            url = "http://127.0.0.1:8080/detallePedido/estadisticas/masPedidas";
             headers = ["Nombre", "Tipo", "Total Pedidos"];
         } else if (tipo === "recaudacion") {
-            url = `http://localhost:8080/pedido/estadisticas/recaudacion?inicio=${inicio}&fin=${fin}`;
+            url = `http://127.0.0.1:8080/pedido/estadisticas/recaudacion?inicio=${inicio}&fin=${fin}`;
             headers = ["Fecha", "Total Recaudado"];
         } else if (tipo === "periodo") {
-            url = `http://localhost:8080/pedido/estadisticas/totalPedidos?inicio=${inicio}&fin=${fin}`;
+            url = `http://127.0.0.1:8080/pedido/estadisticas/totalPedidos?inicio=${inicio}&fin=${fin}`;
             headers = ["Fecha", "Cantidad de Pedidos", "Monto Total"];
         }
 
