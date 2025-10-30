@@ -82,7 +82,55 @@ document.addEventListener("DOMContentLoaded", () => {
                 tablaBody.appendChild(row);
             });
 
-            // Gráfico (Día 3)
+            // Generar gráfico
+            const canvas = document.getElementById("graficoInforme");
+
+            // Destruir gráfico anterior si existe
+            if (window.graficoActual) {
+                window.graficoActual.destroy();
+            }
+
+            // Preparar datos para el gráfico
+            let etiquetas = [];
+            let valores = [];
+            let label = "";
+
+            if (tipo === "variedad") {
+                etiquetas = data.map(item => `${item.nombre} (${item.tipo})`);
+                valores = data.map(item => item.totalPedidos);
+                label = "Productos más pedidos";
+            } else if (tipo === "recaudacion") {
+                etiquetas = data.map(item => item.fecha);
+                valores = data.map(item => item.totalRecaudado);
+                label = "Recaudación por día";
+            } else if (tipo === "periodo") {
+                etiquetas = data.map(item => item.fecha);
+                valores = data.map(item => item.montoTotal);
+                label = "Monto total por día";
+            }
+
+            // Crear gráfico
+            window.graficoActual = new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: etiquetas,
+                    datasets: [{
+                        label: label,
+                        data: valores,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
 
         } catch (error) {
             alert("Error al generar el informe: " + error.message);
