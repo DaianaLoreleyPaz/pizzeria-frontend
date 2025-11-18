@@ -1,11 +1,13 @@
+// FUNCIÓN CLAVE: Lógica de Generación y Control de Duplicados
 async function generarFactura(idPedido) {
   try {
-    // Verificar si ya existe la factura
+// 1. CONTROL DE DUPLICADOS (fetch GET a /factura/readOne/{idPedido})
     const readResponse = await fetch(`http://localhost:8080/factura/readOne/${idPedido}`, {
       method: 'GET'
     });
 
     if (readResponse.ok) {
+      // Si la factura ya existe, la muestra (llama a mostrarFactura)
       const facturaExistente = await readResponse.json();
       mostrarFactura(facturaExistente.pedido.idPedido); // Si ya existe, la muestra
     } else {
@@ -13,6 +15,8 @@ async function generarFactura(idPedido) {
       const createResponse = await fetch(`http://localhost:8080/factura/create/${idPedido}`, {
         method: 'POST'
       });
+      // Si NO existe (404), la crea (fetch POST a /factura/create/{idPedido})
+      // Si es exitoso, muestra el modal de éxito.
 
     if (!createResponse.ok) {
         Swal.fire({
@@ -42,6 +46,7 @@ async function generarFactura(idPedido) {
 
     });
   }
+  // Captura errores de red o del servidor y muestra un Swal.fire
   } catch (error) {
     Swal.fire({
       icon: 'error',
@@ -50,7 +55,7 @@ async function generarFactura(idPedido) {
     });
   }
 }
-
+//funcion para mostrar factura 
 async function mostrarFactura(id) {
   try {
     const response = await fetch(`http://localhost:8080/factura/readOne/${id}`);
@@ -79,7 +84,7 @@ async function mostrarFactura(id) {
     Swal.fire("Error", "No se pudo mostrar la factura", "error");
   }
 }
-
+// FUNCIÓN CLAVE: Generación y Descarga del PDF
 function generarPDF(factura) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
