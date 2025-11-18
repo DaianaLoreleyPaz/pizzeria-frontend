@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Estas variables globales (Model de datos en el Frontend) son necesarias para que 
 // otras funciones (como editarPedido en pedido.js) puedan acceder a los productos
 // sin tener que hacer un FETCH extra.
@@ -9,13 +10,26 @@ function cargarProductos() {
   fetch('http://localhost:8080/producto/readAll')
     .then(response => {
       // Manejo de errores de red o servidor
+=======
+// Estas variables guardarán los datos de los productos para los selects
+let allProducts = [];
+let productConfig = {};
+
+function cargarProductos() {
+  fetch('http://localhost:8080/producto/readAll')
+    .then(response => {
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       if (!response.ok) {
         throw new Error('Error al cargar productos');
       }
       return response.json();
     })
     .then(productos => {
+<<<<<<< HEAD
       allProducts = productos; // Guarda el array plano
+=======
+      allProducts = productos; // Guardamos la lista completa para buscar el ID al final
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       
       // 1. Procesamos la lista de productos para crear un "mapa" de selección
       productConfig = {};
@@ -32,7 +46,11 @@ function cargarProductos() {
         }
       });
 
+<<<<<<< HEAD
       // 2. Renderización del HTML: Reemplaza el <select> único por los 3 selects y el botón.
+=======
+      // 2. Creamos el nuevo HTML para los selects dependientes
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       const contenedor = document.getElementById('productosContainer');
       contenedor.innerHTML = `
         <div class="row g-3 align-items-end">
@@ -75,9 +93,15 @@ function cargarProductos() {
         selectNombre.appendChild(option);
       });
 
+<<<<<<< HEAD
       // 5. Creamos los listeners para los selects anidados (La lógica del "Controller/ViewModel")
       
       // Listener 1: Cuando cambia el NOMBRE, se resetea y llena el TIPO      selectTamanio.addEventListener('change', () => {
+=======
+      // 5. Creamos los listeners para los selects anidados
+      
+      // Cuando cambia el NOMBRE
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       selectNombre.addEventListener('change', () => {
         const nombreSel = selectNombre.value;
         
@@ -100,7 +124,11 @@ function cargarProductos() {
         }
       });
 
+<<<<<<< HEAD
       // Listener 2: Cuando cambia el TIPO, se resetea y llena el TAMAÑO
+=======
+      // Cuando cambia el TIPO
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       selectTipo.addEventListener('change', () => {
         const nombreSel = selectNombre.value;
         const tipoSel = selectTipo.value;
@@ -122,11 +150,20 @@ function cargarProductos() {
         }
       });
 
+<<<<<<< HEAD
       
       btnAddProducto.disabled = !selectTamanio.value;
      
 
       //Listener 3: Botón AGREGAR (Busca el ID único y lo añade al listado del pedido)
+=======
+      // Cuando cambia el TAMAÑO
+      selectTamanio.addEventListener('change', () => {
+        btnAddProducto.disabled = !selectTamanio.value;
+      });
+
+      // 6. Acción del botón AGREGAR
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       btnAddProducto.addEventListener('click', () => {
         const nombreSel = selectNombre.value;
         const tipoSel = selectTipo.value;
@@ -176,7 +213,10 @@ function cargarProductos() {
     })
     .catch(error => {
       console.error("Error en cargarProductos:", error);
+<<<<<<< HEAD
       // Manejo de error si el fetch falla
+=======
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       const contenedor = document.getElementById('productosContainer');
       contenedor.innerHTML = '<div class="alert alert-danger">No se pudieron cargar los productos. Verifique la conexión con el backend.</div>';
     });

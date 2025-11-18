@@ -1,8 +1,13 @@
 // FUNCIÓN CLAVE: Lógica de Generación y Control de Duplicados
 async function generarFactura(idPedido) {
   try {
+<<<<<<< HEAD
 // 1. CONTROL DE DUPLICADOS (fetch GET a /factura/readOne/{idPedido})
     const readResponse = await fetch(`http://localhost:8080/factura/readOne/${idPedido}`, {
+=======
+    // Verificar si ya existe la factura
+    const readResponse = await fetch(`http://127.0.0.1:8080/factura/readOne/${idPedido}`, {
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       method: 'GET'
     });
 
@@ -11,8 +16,8 @@ async function generarFactura(idPedido) {
       const facturaExistente = await readResponse.json();
       mostrarFactura(facturaExistente.pedido.idPedido); // Si ya existe, la muestra
     } else {
-      // Si no existe, crear la factura (código del Día 2)
-      const createResponse = await fetch(`http://localhost:8080/factura/create/${idPedido}`, {
+      // Si no existe, crear la factura
+      const createResponse = await fetch(`http://127.0.0.1:8080/factura/create/${idPedido}`, {
         method: 'POST'
       });
       // Si NO existe (404), la crea (fetch POST a /factura/create/{idPedido})
@@ -58,7 +63,7 @@ async function generarFactura(idPedido) {
 //funcion para mostrar factura 
 async function mostrarFactura(id) {
   try {
-    const response = await fetch(`http://localhost:8080/factura/readOne/${id}`);
+    const response = await fetch(`http://127.0.0.1:8080/factura/readOne/${id}`);
     if (!response.ok) throw new Error("No se pudo obtener la factura");
 
     const factura = await response.json();
@@ -89,44 +94,52 @@ function generarPDF(factura) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
-  const pedido = factura.pedido;
+  // --- INICIO CÓDIGO DEL LOGO ---
+  // 1. Obtenemos la imagen del logo que YA está cargada en el HTML
+  const logo = document.getElementById('logoSidebar');
 
-  // Datos de cabecera
-  doc.setFontSize(18);
-  doc.setFont("helvetica", "bold");
-  doc.text(`Factura Nº ${factura.numeroDeFactura}`, 20, 20);
+  // 2. Agregamos esa imagen al documento PDF
+  if (logo) {
+    doc.addImage(logo, 'JPEG', 150, 10, 40, 25);
+  }
+    const pedido = factura.pedido;
 
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text(`Fecha: ${factura.fecha}`, 20, 30);
-  doc.text(`Hora: ${factura.hora}`, 20, 36);
-  doc.text(`Cliente: ${pedido.nombreYApellidoCliente}`, 20, 42);
-  doc.text(`Estado del Pedido: ${pedido.estado}`, 20, 48);
+    // Datos de cabecera
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Factura Nº ${factura.numeroDeFactura}`, 20, 20);
 
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "bold");
-  doc.text("Detalle del Pedido:", 20, 60);
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Fecha: ${factura.fecha}`, 20, 30);
+    doc.text(`Hora: ${factura.hora}`, 20, 36);
+    doc.text(`Cliente: ${pedido.nombreYApellidoCliente}`, 20, 42);
+    doc.text(`Estado del Pedido: ${pedido.estado}`, 20, 48);
 
-  // Detalles
-  let y = 70;
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  pedido.detallesDelPedido.forEach(item => {
-    doc.text(`${item.nombreProducto} (${item.tipo}, ${item.tamanio} porciones)`, 20, y);
-    doc.text(`x${item.cantidad} = $${item.subtotal.toFixed(2)}`, 140, y);
-    y += 8;
-  });
+    doc.setFontSize(14);
+    doc.setFont("helvetica", "bold");
+    doc.text("Detalle del Pedido:", 20, 60);
 
-  // Total
-  doc.setFont("helvetica", "bold");
-  doc.text(`Total: $${pedido.total.toFixed(2)}`, 20, y + 10);
+    // Detalles
+    let y = 70;
+    doc.setFontSize(12);
+    doc.setFont("helvetica", "normal");
+    pedido.detallesDelPedido.forEach(item => {
+      doc.text(`${item.nombreProducto} (${item.tipo}, ${item.tamanio} porciones)`, 20, y);
+      doc.text(`x${item.cantidad} = $${item.subtotal.toFixed(2)}`, 140, y);
+      y += 8;
+    });
 
-  // Footer
-  doc.setFontSize(10);
-  doc.setFont("courier", "italic");
-  doc.text("Pizzería Don Massimo", 150, 280, { align: 'right' });
-  doc.text("Las mejores variedades de pizzas", 150, 285, { align: 'right' });
+    // Total
+    doc.setFont("helvetica", "bold");
+    doc.text(`Total: $${pedido.total.toFixed(2)}`, 20, y + 10);
 
-  // Descargar
-  doc.save(`Factura_${factura.numeroDeFactura}_${pedido.nombreYApellidoCliente}.pdf`);
+    // Footer
+    doc.setFontSize(10);
+    doc.setFont("courier", "italic");
+    doc.text("Pizzería Don Massimo", 150, 280, { align: 'right' });
+    doc.text("Las mejores variedades de pizzas", 150, 285, { align: 'right' });
+
+    // Descargar
+    doc.save(`Factura_${factura.numeroDeFactura}_${pedido.nombreYApellidoCliente}.pdf`);
 }

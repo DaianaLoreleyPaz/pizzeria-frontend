@@ -45,15 +45,15 @@ document.addEventListener("DOMContentLoaded", () => {
        
         // Lógica de ruteo para consumir los endpoints de estadísticas [cite: 400]
         if (tipo === "variedad") {
-            url = "http://localhost:8080/detallePedido/estadisticas/masPedidas";
+            url = "http://127.0.0.1:8080/detallePedido/estadisticas/masPedidas";
             headers = ["Nombre", "Tipo", "Total Pedidos"];
             label = "Pizzas Más Pedidas";
         } else if (tipo === "recaudacion") {
-            url = `http://localhost:8080/pedido/estadisticas/recaudacion?inicio=${inicio}&fin=${fin}`;
+            url = `http://127.0.0.1:8080/pedido/estadisticas/recaudacion?inicio=${inicio}&fin=${fin}`;
             headers = ["Fecha", "Total Recaudado"];
             label = "Recaudación por Período";
         } else if (tipo === "periodo") {
-            url = `http://localhost:8080/pedido/estadisticas/totalPedidos?inicio=${inicio}&fin=${fin}`;
+            url = `http://127.0.0.1:8080/pedido/estadisticas/totalPedidos?inicio=${inicio}&fin=${fin}`;
             headers = ["Fecha", "Cantidad de Pedidos", "Monto Total"];
             label = "Pedidos Totales por Período";
         }

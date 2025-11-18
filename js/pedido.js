@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // LÓGICA DE SUBMIT (Crear y Editar)
+=======
+// Guardar (crear o editar) pedido
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 document.getElementById('pedidoForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -35,13 +39,21 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
         });
     return;
   }
+<<<<<<< HEAD
 // Lógica de ruteo: Determina si es un POST (create) o un PUT (update)
+=======
+
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
   const idPedido = document.getElementById('idPedido').value;
   const url = idPedido
     ? `http://127.0.0.1:8080/pedido/update/${idPedido}`
     : 'http://127.0.0.1:8080/pedido/create';
   const method = idPedido ? 'PUT' : 'POST';
+<<<<<<< HEAD
 // FETCH y manejo de la respuesta (success / error)
+=======
+
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
   fetch(url, {
     method,
     headers: { 'Content-Type': 'application/json' },
@@ -57,8 +69,11 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
         title: 'Pedido guardado',
         text: 'Pedido guardado correctamente'
       });
+<<<<<<< HEAD
 
       // Si es exitoso, limpia el formulario y actualiza la tabla de pedidos
+=======
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       listarDetallesPedido();
       document.getElementById('pedidoForm').reset();
       
@@ -78,7 +93,11 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
 });
 
 
+<<<<<<< HEAD
 // FUNCIÓN CLAVE: LISTAR PEDIDOS (Renderización de la Vista)
+=======
+// Listar pedidos y mostrar productos en cada fila
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 function listarDetallesPedido() {
   fetch('http://127.0.0.1:8080/pedido/readAll')
     .then(response => response.json())
@@ -88,7 +107,10 @@ function listarDetallesPedido() {
       // Itera sobre todos los pedidos recibidos
       pedidos.forEach(pedido => {
       console.log(pedido.estado)
+<<<<<<< HEAD
       // Itera sobre los detalles para renderizar las filas y calcular el total.
+=======
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
         pedido.detallesDelPedido.forEach(detalle => {
           const tr = document.createElement('tr');
           // Para cambiar el color del estado dependiendo su valor
@@ -130,7 +152,11 @@ function listarDetallesPedido() {
       });
     });
 }
+<<<<<<< HEAD
 // FUNCIÓN CLAVE: EDICIÓN (Abre un pedido para modificarlo)
+=======
+
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 function editarPedidoPorId(id) {
     window.scrollTo({
           top: 0,
@@ -321,6 +347,42 @@ function editarPedido(pedido) {
       selectTipo.disabled = true;
       selectTamanio.disabled = true;
       btnAddProducto.disabled = true;
+<<<<<<< HEAD
+=======
+    });
+}
+// ==================================================================
+// ============ FIN FUNCIÓN MODIFICADA ==============================
+// ==================================================================
+
+
+// Cambiar estado de pedido (Función no usada en los botones, pero existe)
+function cambiarEstado(id, estadoActual) {
+  const nuevoEstado = (estadoActual + 1) % 4;
+
+  fetch(`http://127.0.0.1:8080/pedido/readOne/${id}`)
+    .then(response => response.json())
+    .then(pedido => {
+      pedido.estado = indiceAEstadoEnum(nuevoEstado);
+
+      fetch(`http://127.0.0.1:8080/pedido/update/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pedido)
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Error al actualizar');
+          return response.json();
+        })
+        .then(() => {
+          alert('Estado cambiado');
+          listarDetallesPedido();
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Error al cambiar estado');
+        });
+>>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
     });
 }
 // ==================================================================
