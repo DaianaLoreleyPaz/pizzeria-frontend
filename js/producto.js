@@ -1,37 +1,23 @@
-<<<<<<< HEAD
 // Estas variables globales (Model de datos en el Frontend) son necesarias para que 
 // otras funciones (como editarPedido en pedido.js) puedan acceder a los productos
-// sin tener que hacer un FETCH extra.
+// sin tener que hacer un FETCH extra. 
 let allProducts = [];
-let productConfig = {};
+let productConfig = {}; // Almacena la estructura anidada: {Nombre: {Tipo: [Tamaño]}}
 
 // FUNCIÓN CLAVE: Carga los productos y configura los selects anidados
 function cargarProductos() {
   fetch('http://localhost:8080/producto/readAll')
     .then(response => {
       // Manejo de errores de red o servidor
-=======
-// Estas variables guardarán los datos de los productos para los selects
-let allProducts = [];
-let productConfig = {};
-
-function cargarProductos() {
-  fetch('http://localhost:8080/producto/readAll')
-    .then(response => {
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       if (!response.ok) {
         throw new Error('Error al cargar productos');
       }
       return response.json();
     })
     .then(productos => {
-<<<<<<< HEAD
-      allProducts = productos; // Guarda el array plano
-=======
-      allProducts = productos; // Guardamos la lista completa para buscar el ID al final
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
+      allProducts = productos; // 1. Guarda el array plano para búsquedas finales.
       
-      // 1. Procesamos la lista de productos para crear un "mapa" de selección
+      // 2. Procesamiento de datos: Crea la jerarquía de selects: {Nombre: {Tipo: [Tamaño]}}
       productConfig = {};
       productos.forEach(p => {
         if (!productConfig[p.nombre]) {
@@ -46,16 +32,12 @@ function cargarProductos() {
         }
       });
 
-<<<<<<< HEAD
-      // 2. Renderización del HTML: Reemplaza el <select> único por los 3 selects y el botón.
-=======
-      // 2. Creamos el nuevo HTML para los selects dependientes
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
+      // 3. Renderización del HTML: Inserta los 3 selects dependientes y el botón.
       const contenedor = document.getElementById('productosContainer');
       contenedor.innerHTML = `
         <div class="row g-3 align-items-end">
           <div class="col-md-4">
-            <label for="selectNombre" class="form-label">Producto</label>
+            <label for="selectNombre" class="form-label">Agregar producto</label>
             <select id="selectNombre" class="form-select">
               <option value="">Seleccione un nombre</option>
             </select>
@@ -79,13 +61,15 @@ function cargarProductos() {
         <div id="productosSeleccionados" class="row mt-3"></div>
       `;
 
-      // 3. Obtenemos referencias a los nuevos elementos
+      // 4. Obtenemos referencias a los nuevos elementos para los Listeners
       const selectNombre = document.getElementById('selectNombre');
       const selectTipo = document.getElementById('selectTipo');
       const selectTamanio = document.getElementById('selectTamanio');
       const btnAddProducto = document.getElementById('btnAddProducto');
+      const productosSeleccionados = document.getElementById('productosSeleccionados');
 
-      // 4. Llenamos el primer select (Nombres)
+
+      // 5. Llenamos el primer select (Nombres)
       Object.keys(productConfig).sort().forEach(nombre => {
         const option = document.createElement('option');
         option.value = nombre;
@@ -93,15 +77,9 @@ function cargarProductos() {
         selectNombre.appendChild(option);
       });
 
-<<<<<<< HEAD
-      // 5. Creamos los listeners para los selects anidados (La lógica del "Controller/ViewModel")
+      // 6. Creación de Listeners Anidados (Controlador de la Vista)
       
-      // Listener 1: Cuando cambia el NOMBRE, se resetea y llena el TIPO      selectTamanio.addEventListener('change', () => {
-=======
-      // 5. Creamos los listeners para los selects anidados
-      
-      // Cuando cambia el NOMBRE
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
+      // Listener 1: Cuando cambia el NOMBRE, se resetea y llena el TIPO
       selectNombre.addEventListener('change', () => {
         const nombreSel = selectNombre.value;
         
@@ -124,11 +102,7 @@ function cargarProductos() {
         }
       });
 
-<<<<<<< HEAD
       // Listener 2: Cuando cambia el TIPO, se resetea y llena el TAMAÑO
-=======
-      // Cuando cambia el TIPO
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       selectTipo.addEventListener('change', () => {
         const nombreSel = selectNombre.value;
         const tipoSel = selectTipo.value;
@@ -150,26 +124,18 @@ function cargarProductos() {
         }
       });
 
-<<<<<<< HEAD
-      
-      btnAddProducto.disabled = !selectTamanio.value;
-     
-
-      //Listener 3: Botón AGREGAR (Busca el ID único y lo añade al listado del pedido)
-=======
-      // Cuando cambia el TAMAÑO
+      // Listener 3: Cuando cambia el TAMAÑO, habilita el botón AGREGAR
       selectTamanio.addEventListener('change', () => {
         btnAddProducto.disabled = !selectTamanio.value;
       });
 
-      // 6. Acción del botón AGREGAR
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
+      // 7. Acción del botón AGREGAR (Busca el ID único y lo añade al listado del pedido)
       btnAddProducto.addEventListener('click', () => {
         const nombreSel = selectNombre.value;
         const tipoSel = selectTipo.value;
-        const tamanioSel = parseInt(selectTamanio.value, 10); // El tamaño es un número
+        const tamanioSel = parseInt(selectTamanio.value, 10); 
 
-        // Buscamos en la lista original el producto que coincide
+        // Buscamos en la lista original el producto que coincide con los 3 criterios
         const productoEncontrado = allProducts.find(p => 
           p.nombre === nombreSel && 
           p.tipo === tipoSel && 
@@ -187,8 +153,7 @@ function cargarProductos() {
           return;
         }
 
-        // Agregamos el producto a la lista (como antes)
-        const productosSeleccionados = document.getElementById('productosSeleccionados');
+        // Agregamos el producto a la lista 
         const div = document.createElement('div');
         div.className = 'col-md-6 mb-2';
         div.id = `prod-${id}`;
@@ -201,7 +166,7 @@ function cargarProductos() {
         `;
         productosSeleccionados.appendChild(div);
 
-        // Reseteamos los selects
+        // Reseteamos los selects para la próxima selección
         selectNombre.value = "";
         selectTipo.innerHTML = '<option value="">Seleccione un tipo</option>';
         selectTamanio.innerHTML = '<option value="">Seleccione porciones</option>';
@@ -212,12 +177,8 @@ function cargarProductos() {
 
     })
     .catch(error => {
+      // Manejo de error si el fetch falla (ej: Backend caído)
       console.error("Error en cargarProductos:", error);
-<<<<<<< HEAD
-      // Manejo de error si el fetch falla
-=======
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
-      const contenedor = document.getElementById('productosContainer');
-      contenedor.innerHTML = '<div class="alert alert-danger">No se pudieron cargar los productos. Verifique la conexión con el backend.</div>';
+      document.getElementById('productosContainer').innerHTML = '<div class="alert alert-danger">No se pudieron cargar los productos. Verifique la conexión con el backend.</div>';
     });
 }
