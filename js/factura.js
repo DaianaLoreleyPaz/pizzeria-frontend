@@ -1,13 +1,8 @@
 // FUNCIÓN CLAVE: Lógica de Generación y Control de Duplicados
 async function generarFactura(idPedido) {
   try {
-<<<<<<< HEAD
-// 1. CONTROL DE DUPLICADOS (fetch GET a /factura/readOne/{idPedido})
-    const readResponse = await fetch(`http://localhost:8080/factura/readOne/${idPedido}`, {
-=======
     // Verificar si ya existe la factura
     const readResponse = await fetch(`http://127.0.0.1:8080/factura/readOne/${idPedido}`, {
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       method: 'GET'
     });
 
