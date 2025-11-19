@@ -1,14 +1,6 @@
-<<<<<<< HEAD
-// LÓGICA DE SUBMIT (Crear y Editar)
-=======
 // Guardar (crear o editar) pedido
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 document.getElementById('pedidoForm').addEventListener('submit', function (e) {
   e.preventDefault();
-
-  // Esta función empaqueta todos los datos del formulario (cliente, fecha, etc.)
-  // y, de manera CRUCIAL, toma los IDs y cantidades de los productos 
-  // del div 'productosSeleccionados' para armar el array 'detallesDelPedido'.
   const formData = new FormData(this);
 
   const pedido = {
@@ -30,7 +22,7 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
       });
     }
   });
-// Validación: Si no hay productos válidos, muestra un error.
+
   if (pedido.detallesDelPedido.length === 0) {
     Swal.fire({
           icon: 'warning',
@@ -39,21 +31,13 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
         });
     return;
   }
-<<<<<<< HEAD
-// Lógica de ruteo: Determina si es un POST (create) o un PUT (update)
-=======
 
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
   const idPedido = document.getElementById('idPedido').value;
   const url = idPedido
     ? `http://127.0.0.1:8080/pedido/update/${idPedido}`
     : 'http://127.0.0.1:8080/pedido/create';
   const method = idPedido ? 'PUT' : 'POST';
-<<<<<<< HEAD
-// FETCH y manejo de la respuesta (success / error)
-=======
 
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
   fetch(url, {
     method,
     headers: { 'Content-Type': 'application/json' },
@@ -69,11 +53,6 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
         title: 'Pedido guardado',
         text: 'Pedido guardado correctamente'
       });
-<<<<<<< HEAD
-
-      // Si es exitoso, limpia el formulario y actualiza la tabla de pedidos
-=======
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
       listarDetallesPedido();
       document.getElementById('pedidoForm').reset();
       
@@ -93,25 +72,21 @@ document.getElementById('pedidoForm').addEventListener('submit', function (e) {
 });
 
 
-<<<<<<< HEAD
-// FUNCIÓN CLAVE: LISTAR PEDIDOS (Renderización de la Vista)
-=======
 // Listar pedidos y mostrar productos en cada fila
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 function listarDetallesPedido() {
   fetch('http://127.0.0.1:8080/pedido/readAll')
     .then(response => response.json())
     .then(pedidos => {
       const tbody = document.querySelector('#tablaPedidos tbody');
       tbody.innerHTML = '';
-      // Itera sobre todos los pedidos recibidos
+      
       pedidos.forEach(pedido => {
-      console.log(pedido.estado)
-<<<<<<< HEAD
-      // Itera sobre los detalles para renderizar las filas y calcular el total.
-=======
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
+        // NOTA: Si el Backend envía pedidos vacíos (fantasma), el código Frontend 
+        // simplemente ignora esos pedidos al no iterar en el forEach siguiente.
+        
         pedido.detallesDelPedido.forEach(detalle => {
+          // El total de la orden NO se calcula aquí, ya que el Backend es la autoridad del precio final.
+          
           const tr = document.createElement('tr');
           // Para cambiar el color del estado dependiendo su valor
           const claseEstado = pedido.estado.toLowerCase() === 'pendiente' ? 'text-danger'
@@ -119,9 +94,7 @@ function listarDetallesPedido() {
                               : pedido.estado.toLowerCase() === 'entregado' ? 'text-dark'
                               : pedido.estado.toLowerCase() === 'preparando' ? 'text-warning'
                               : '';
-          // Renderización: Crea la fila <tr> para mostrar la data del producto.
-          // Incluye la lógica para mostrar el botón de Factura solo si el estado es 'LISTO'.
-          // Incluye los botones 'Editar' y 'Eliminar'
+          
           tr.innerHTML = `
             <td>${pedido.idPedido}</td>
             <td>${pedido.nombreYApellidoCliente || 'Sin cliente'}</td>
@@ -132,7 +105,6 @@ function listarDetallesPedido() {
             <td class="${claseEstado}">${pedido.estado}</td>
             <td>$${(detalle.subtotal / detalle.cantidad).toFixed(2)}</td>
             <td>$${detalle.subtotal.toFixed(2)}</td>
-            
             <td>
               <button class="btn btn-sm btn-warning me-1" onclick="editarPedidoPorId(${pedido.idPedido})">
                   <i class="fas fa-edit"></i>
@@ -149,14 +121,12 @@ function listarDetallesPedido() {
           `;
           tbody.appendChild(tr);
         });
+        
+        // LA FILA DE TOTAL (trTotal) FUE ELIMINADA.
       });
     });
 }
-<<<<<<< HEAD
-// FUNCIÓN CLAVE: EDICIÓN (Abre un pedido para modificarlo)
-=======
 
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
 function editarPedidoPorId(id) {
     window.scrollTo({
           top: 0,
@@ -175,7 +145,7 @@ function editarPedidoPorId(id) {
 }
 
 // ==================================================================
-// ============ FUNCIÓN MODIFICADA ==================================
+// ============ FUNCIÓN POBLAR FORMULARIO DE EDICIÓN ================
 // ==================================================================
 function editarPedido(pedido) {
     console.log(pedido);
@@ -347,133 +317,97 @@ function editarPedido(pedido) {
       selectTipo.disabled = true;
       selectTamanio.disabled = true;
       btnAddProducto.disabled = true;
-<<<<<<< HEAD
-=======
     });
 }
 // ==================================================================
-// ============ FIN FUNCIÓN MODIFICADA ==============================
+// ============ FIN FUNCIÓN POBLAR FORMULARIO DE EDICIÓN ============
 // ==================================================================
 
 
 // Cambiar estado de pedido (Función no usada en los botones, pero existe)
 function cambiarEstado(id, estadoActual) {
-  const nuevoEstado = (estadoActual + 1) % 4;
+    const nuevoEstado = (estadoActual + 1) % 4;
 
-  fetch(`http://127.0.0.1:8080/pedido/readOne/${id}`)
-    .then(response => response.json())
-    .then(pedido => {
-      pedido.estado = indiceAEstadoEnum(nuevoEstado);
+    fetch(`http://127.0.0.1:8080/pedido/readOne/${id}`)
+      .then(response => response.json())
+      .then(pedido => {
+        pedido.estado = indiceAEstadoEnum(nuevoEstado);
 
-      fetch(`http://127.0.0.1:8080/pedido/update/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedido)
-      })
-        .then(response => {
-          if (!response.ok) throw new Error('Error al actualizar');
-          return response.json();
+        fetch(`http://127.0.0.1:8080/pedido/update/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(pedido)
         })
-        .then(() => {
-          alert('Estado cambiado');
-          listarDetallesPedido();
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Error al cambiar estado');
-        });
->>>>>>> 06a7026adfb07938021fbfa60abf281a9354197c
-    });
-}
-// ==================================================================
-// ============ FIN FUNCIÓN MODIFICADA ==============================
-// ==================================================================
-
-
-// --- Helpers de Estado (Usados para traducir estados de BDD a índices de formulario) ---
-function cambiarEstado(id, estadoActual) {
-  const nuevoEstado = (estadoActual + 1) % 4;
-
-  fetch(`http://127.0.0.1:8080/pedido/readOne/${id}`)
-    .then(response => response.json())
-    .then(pedido => {
-      pedido.estado = indiceAEstadoEnum(nuevoEstado);
-
-      fetch(`http://127.0.0.1:8080/pedido/update/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(pedido)
-      })
-        .then(response => {
-          if (!response.ok) throw new Error('Error al actualizar');
-          return response.json();
-        })
-        .then(() => {
-          alert('Estado cambiado');
-          listarDetallesPedido();
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Error al cambiar estado');
-        });
-    });
-}
-// --- Para eliminar un pedido
-function eliminarPedido(id) {
-  if (confirm("¿Deseas eliminar este pedido? Se eliminarán también sus detalles")) {
-    fetch(`http://127.0.0.1:8080/pedido/delete/${id}`, {
-      method: 'DELETE'
-    })
-      .then(() => {
-        Swal.fire({
-                icon: 'success',
-                title: 'Pedido eliminado',
-                text: 'Pedido eliminado correctamente'
-              });
-        listarDetallesPedido();
-      })
-      .catch(err => {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: err.message || 'Error al eliminar el pedido'
+          .then(response => {
+            if (!response.ok) throw new Error('Error al actualizar');
+            return response.json();
+          })
+          .then(() => {
+            alert('Estado cambiado');
+            listarDetallesPedido();
+          })
+          .catch(error => {
+            console.error(error);
+            alert('Error al cambiar estado');
           });
       });
-  }
+}
+
+function eliminarPedido(id) {
+    if (confirm("¿Deseas eliminar este pedido? Se eliminarán también sus detalles")) {
+      fetch(`http://127.0.0.1:8080/pedido/delete/${id}`, {
+        method: 'DELETE'
+      })
+        .then(() => {
+          Swal.fire({
+                  icon: 'success',
+                  title: 'Pedido eliminado',
+                  text: 'Pedido eliminado correctamente'
+                });
+          listarDetallesPedido();
+        })
+        .catch(err => {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: err.message || 'Error al eliminar el pedido'
+            });
+        });
+    }
 }
 
 // --- Helpers de Estado ---
 function estadoEnumAIndice(estadoStr) {
-  const mapa = {
-    'PENDIENTE': 0,
-    'PREPARANDO': 1, // Tu script original decía 'EN_PREPARACION' aquí
-    'LISTO': 2,
-    'ENTREGADO': 3
-  };
-  return mapa[estadoStr] ?? 0;
+    const mapa = {
+      'PENDIENTE': 0,
+      'PREPARANDO': 1, // Tu script original decía 'EN_PREPARACION' aquí
+      'LISTO': 2,
+      'ENTREGADO': 3
+    };
+    return mapa[estadoStr] ?? 0;
 }
 
 function indiceAEstadoEnum(index) {
-  const estados = ['PENDIENTE', 'PREPARANDO', 'LISTO', 'ENTREGADO'];
-  return estados[index] || 'PENDIENTE';
+    const estados = ['PENDIENTE', 'PREPARANDO', 'LISTO', 'ENTREGADO'];
+    return estados[index] || 'PENDIENTE';
 }
 
 function estadoTexto(estadoEnum) {
-  const traduccion = {
-    'PENDIENTE': 'Pendiente',
-    'PREPARANDO': 'En preparación',
-    'LISTO': 'Listo',
-    'ENTREGADO': 'Entregado'
-  };
-  return traduccion[estadoEnum] || 'Desconocido';
+    const traduccion = {
+      'PENDIENTE': 'Pendiente',
+      'PREPARANDO': 'En preparación',
+      'LISTO': 'Listo',
+      'ENTREGADO': 'Entregado'
+    };
+    return traduccion[estadoEnum] || 'Desconocido';
 }
 
 function estadoEnumAIndice(estadoStr) {
-  const mapa = {
-    'PENDIENTE': 0,
-    'PREPARANDO': 1,
-    'LISTO': 2,
-    'ENTREGADO': 3
-  };
-  return mapa[estadoStr] ?? 0;
+    const mapa = {
+      'PENDIENTE': 0,
+      'PREPARANDO': 1,
+      'LISTO': 2,
+      'ENTREGADO': 3
+    };
+    return mapa[estadoStr] ?? 0;
 }
